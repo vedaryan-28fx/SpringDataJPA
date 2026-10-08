@@ -3,6 +3,7 @@ package com.ved.SpringDataJPA.services;
 import com.ved.SpringDataJPA.dto.CreateUserDto;
 import com.ved.SpringDataJPA.dto.UserDto;
 import com.ved.SpringDataJPA.entity.User;
+import com.ved.SpringDataJPA.exceptions.UserNotFoundException;
 import com.ved.SpringDataJPA.repositories.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -37,7 +38,8 @@ public class UserService {
     }
 
     public UserDto getUserById(long id) {
-        User user = userRepository.findById(id).orElseThrow();
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("User with id " + id + " not found"));
         return  new UserDto(user.getId(),user.getName(),user.getEmail());
     }
 
